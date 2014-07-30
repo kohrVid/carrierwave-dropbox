@@ -21,9 +21,13 @@ module CarrierWave
 
       def dropbox_client
         @dropbox_client ||= begin
-          session = DropboxSession.new(config[:app_key], config[:app_secret])
-          session.set_access_token(config[:access_token], config[:access_token_secret])
-          DropboxClient.new(session, config[:access_type])
+          if config[:access_token_secret].present?
+            session = DropboxSession.new(config[:app_key], config[:app_secret])
+            session.set_access_token(config[:access_token], config[:access_token_secret])
+            DropboxClient.new(session, config[:access_type])
+          else
+            DropboxClient.new( config[:access_token] )
+          end
         end
       end
 
