@@ -20,12 +20,19 @@ module CarrierWave
       end
 
       def dropbox_client
+        log = Logger.new(STDOUT)
+        log.info "-------> IN dropbox_client!"
+        log.info "-----------> config[:access_token_secret]: #{config[:access_token_secret].inspect}"
+        
         @dropbox_client ||= begin
           if config[:access_token_secret].present?
+            log.info "------> using oauth1 version"
             session = DropboxSession.new(config[:app_key], config[:app_secret])
             session.set_access_token(config[:access_token], config[:access_token_secret])
             DropboxClient.new(session, config[:access_type])
           else
+            log.info "------> using oauth2 version"
+            log.info "----------------------> config[:access_token]: #{config[:access_token].inspect}"
             DropboxClient.new( config[:access_token] )
           end
         end
