@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'dropbox_sdk'
+require 'dropbox_api'
 
 module CarrierWave
   module Storage
@@ -25,16 +25,18 @@ module CarrierWave
         log.info "-----------> config[:access_token_secret]: #{config[:access_token_secret].inspect}"
         
         @dropbox_client ||= begin
+=begin
           if config[:access_token_secret].present?
             log.info "------> using oauth1 version"
             session = DropboxSession.new(config[:app_key], config[:app_secret])
             session.set_access_token(config[:access_token], config[:access_token_secret])
             DropboxClient.new(session, config[:access_type])
           else
+=end
             log.info "------> using oauth2 version"
             log.info "----------------------> config[:access_token]: #{config[:access_token].inspect}"
             DropboxClient.new( config[:access_token] )
-          end
+    #      end
         end
       end
 
@@ -46,7 +48,7 @@ module CarrierWave
         @config[:app_key] ||= uploader.dropbox_app_key
         @config[:app_secret] ||= uploader.dropbox_app_secret
         @config[:access_token] ||= uploader.dropbox_access_token
-        @config[:access_token_secret] ||= uploader.dropbox_access_token_secret
+        #@config[:access_token_secret] ||= uploader.dropbox_access_token_secret
         @config[:access_type] ||= uploader.dropbox_access_type || "dropbox"
         @config[:user_id] ||= uploader.dropbox_user_id
 
