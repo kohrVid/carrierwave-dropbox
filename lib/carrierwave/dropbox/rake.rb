@@ -1,4 +1,4 @@
-require "dropbox_sdk"
+require "dropbox_api"
 
 # This code is directly extracted from this repository:
 # https://github.com/janko-m/paperclip-dropbox
